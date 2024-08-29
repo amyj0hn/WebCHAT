@@ -1,7 +1,6 @@
 import { pool as db } from "../config/index.js";
 import { hash } from "bcrypt";
 
-
 class Notifications{
     fetchNotifications(req, res){
         try {

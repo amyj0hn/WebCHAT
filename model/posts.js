@@ -6,15 +6,12 @@ class Posts{
     fetchPosts(req, res){
         try {
           const strQry = `
-              SELECT 
-              postID, 
-              postName, 
-              quantity, 
-              amount, 
-              Category, 
-              prodUrl,
-              postDescription
-              FROM Posts;
+          SELECT
+          postID,
+          userID,
+          content,
+          image_url
+          FROM Posts;
               `
           db.query(strQry, (err, results) => {
             if(err) throw new Error("Issue occurred while retrieving all posts.");
@@ -35,8 +32,8 @@ class Posts{
         try {
           const strQry = `
               SELECT *
-              FROM Products 
-              ORDER BY prodID DESC
+              FROM Posts 
+              ORDER BY postID DESC
               LIMIT 5;
               `
           db.query(strQry, (err, results) => {
@@ -57,16 +54,13 @@ class Posts{
       fetchAPost(req,res){
           try {
               const strQry = `
-          SELECT 
-          prodID, 
-          prodName, 
-          quantity, 
-          amount, 
-          Category, 
-          prodUrl,
-          prodDescription
-          FROM Products
-          WHERE prodID = ${req.params.id};
+          SELECT
+          postID,
+          userID,
+          content,
+          image_url
+          FROM Posts
+          WHERE postID = ${req.params.id};
           `
               db.query(strQry, (err, result) => {
                 if(err) throw new Error('Issue occurred while retrieving the desired post')
@@ -87,7 +81,7 @@ class Posts{
         try{
           let data = req.body
           const strQry = `
-          INSERT INTO Products
+          INSERT INTO Posts
           SET ?;`
   
           db.query(strQry, [data], (err)=>{
@@ -109,7 +103,7 @@ class Posts{
           try {
               let data = req.body;
               const strQry = `
-                  UPDATE Products SET ? WHERE prodID = '${req.params.id}';
+                  UPDATE Posts SET ? WHERE postID = '${req.params.id}';
                   `;
               db.query(strQry, [data], (err) => {
                 if(err) throw new Error("Unable to update post😢");
@@ -129,7 +123,7 @@ class Posts{
       deleteAPost(req,res){
           try {
               const strQry = `
-                  DELETE FROM Products WHERE prodID = '${req.params.id}';`;
+                  DELETE FROM Posts WHERE postID = '${req.params.id}';`;
           
               db.query(strQry, (err) => {
                 if(err) throw new Error("To delete a post, please review your delete query");
