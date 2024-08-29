@@ -1,4 +1,4 @@
-import { connection as db } from "../config/index.js";
+import { pool as db } from "../config/index.js";
 import { createToken } from "../middleware/AuthenticateUser.js";
 import { compare, hash } from "bcrypt";
 
@@ -10,8 +10,7 @@ class Users{
             userID, 
             firstName, 
             lastName,
-            username, 
-            userAge, 
+            username,  
             email, 
             password, 
             profile_picture_url,

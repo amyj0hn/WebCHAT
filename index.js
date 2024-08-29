@@ -1,7 +1,7 @@
 // Imports
 import cors from  'cors';
 import { userRouter, express } from "./controller/userController.js"
-import {productRouter} from "./controller/productController.js"
+import { postRouter } from "./controller/postsController.js"
 import { errorHandling } from './middleware/ErrorHandling.js';
 import path from "path";
 
@@ -30,8 +30,8 @@ app.use(
 )
 
 // Routes
-app.use('/User', userRouter)
-app.use('/Product', productRouter)
+app.use('/Users', userRouter)
+app.use('/Posts', postRouter)
 
 // Endpoint
 app.get("^/$|/WebCHAT", (req, res)=>{
