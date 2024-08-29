@@ -9,13 +9,14 @@ class Users{
             SELECT 
             userID, 
             firstName, 
-            lastName, 
+            lastName,
+            username, 
             userAge, 
-            Gender, 
-            userRole, 
-            emailAdd, 
-            userPass, 
-            UserProfile
+            email, 
+            password, 
+            profile_picture_url,
+            bio,
+            date_of_birth
             FROM Users;`
 
             db.query(sqlQry, (err, results) =>{
@@ -36,17 +37,17 @@ class Users{
     FetchUser(req,res){
       try {
           const sqlQry = `
-          SELECT 
-          userID, 
-          firstName, 
-          lastName, 
-          userAge, 
-          Gender, 
-          userRole, 
-          emailAdd, 
-          userPass, 
-          UserProfile
-          FROM Users 
+            SELECT 
+            userID, 
+            firstName, 
+            lastName,
+            username, 
+            email, 
+            password, 
+            profile_picture_url,
+            bio,
+            date_of_birth
+            FROM Users 
           WHERE userID = '${req.params.id}';
               `;
           db.query(sqlQry, (err, result) => {
@@ -71,8 +72,8 @@ class Users{
 
             // payload
             let user = {
-              emailAdd: data.emailAdd,
-              password: data.userPass,
+              emailAdd: data.email,
+              password: data.password,
             };
             let reqQuery = `
                 INSERT INTO Users SET ?;
@@ -99,8 +100,8 @@ class Users{
     async UpdateUser(req,res){
         try {
             let data = req.body;
-            if (data.userPass) {
-              data.userPass = await hash(data.userPass, 12);
+            if (data.password) {
+              data.password = await hash(data.password, 12);
             }
             const sqlQry = `
                 UPDATE Users SET ? WHERE userID = '${req.params.id}';
@@ -148,14 +149,15 @@ class Users{
             SELECT 
             userID, 
             firstName, 
-            lastName, 
+            lastName,
+            username, 
             userAge, 
-            Gender, 
-            userRole, 
-            emailAdd, 
-            userPass, 
-            UserProfile 
-            FROM Users 
+            email, 
+            password, 
+            profile_picture_url,
+            bio,
+            date_of_birth
+            FROM Users
             WHERE emailAdd = '${emailAdd}';`;
         
             db.query(sqlQry, async (err, results) => {
