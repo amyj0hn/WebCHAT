@@ -1,4 +1,4 @@
-import { pool as db } from "../config/index.js";
+import { connection as db } from "../config/index.js";
 import { createToken } from "../middleware/AuthenticateUser.js";
 import { compare, hash } from "bcrypt";
 
@@ -12,14 +12,16 @@ class Users{
             lastName,
             username,  
             email, 
-            password, 
+            userPassword, 
             profile_picture_url,
             bio,
-            date_of_birth
+            userAge
             FROM Users;`
 
+
             db.query(sqlQry, (err, results) =>{
-                if (err) throw new Error("An issue ocurred while retrieving all users")
+                if (err) throw new Error(err)
+                
                 res.json({
                     status:res.statusCode,
                     results
@@ -42,15 +44,15 @@ class Users{
             lastName,
             username, 
             email, 
-            password, 
+            userPassword, 
             profile_picture_url,
             bio,
-            date_of_birth
+            userAge
             FROM Users 
           WHERE userID = '${req.params.id}';
               `;
           db.query(sqlQry, (err, result) => {
-            if (err) throw new Error('Issue when retrieving a user');
+            if (err) throw new Error(err);
             res.json({
               status: res.statusCode,
               result: result[0],
@@ -67,12 +69,12 @@ class Users{
     async RegisterUser(req,res){
         try {
             let data = req.body;
-            data.userPass = await hash(data.userPass, 12);
+            data.userPassword = await hash(data.userPassword, 12);
 
             // payload
             let user = {
-              emailAdd: data.email,
-              password: data.password,
+              email: data.email,
+              userPassword: data.userPassword,
             };
             let reqQuery = `
                 INSERT INTO Users SET ?;
@@ -96,11 +98,11 @@ class Users{
           } catch (e) {}
     }
 
-    async UpdateUser(req,res){
+    async UpdateUser(req, res){
         try {
             let data = req.body;
-            if (data.password) {
-              data.password = await hash(data.password, 12);
+            if (data.userPassword) {
+              data.userPassword = await hash(data.userPassword, 12);
             }
             const sqlQry = `
                 UPDATE Users SET ? WHERE userID = '${req.params.id}';
@@ -143,7 +145,7 @@ class Users{
 
     async Login(req,res){
         try {
-            const { emailAdd, userPass } = req.body;
+            const { email, userPassword } = req.body;
             const sqlQry = `
             SELECT 
             userID, 
@@ -152,12 +154,12 @@ class Users{
             username, 
             userAge, 
             email, 
-            password, 
+            userPassword, 
             profile_picture_url,
             bio,
-            date_of_birth
+            userAge
             FROM Users
-            WHERE emailAdd = '${emailAdd}';`;
+            WHERE email = '${email}';`;
         
             db.query(sqlQry, async (err, results) => {
               if (err) throw new Error("To login, please review your query");
@@ -167,11 +169,11 @@ class Users{
                   msg: "You provided the wrong email🤨",
                 });
               } else {
-                const isValidPass = await compare(userPass, results[0].userPass);
+                const isValidPass = await compare(userPassword, results[0].userPassword);
                 if (isValidPass) {
                   const token = createToken({
-                    emailAdd,
-                    userPass,
+                    email,
+                    userPassword,
                   });
                   res.json({
                     status: res.statusCode,

@@ -14,6 +14,12 @@ msgRouter.get('/', (req, res)=> {
 msgRouter.get('/:id', (req,res)=>{ 
     messages.fetchMessage(req,res)
 })
+
+// Recent messages
+// msgRouter.get('/recent', (req, res) => {
+//     messages.fetchRecentMessages(req, res)
+// })
+
 // Add message
 msgRouter.post('/add', (req, res) => {
     messages.addMessage(req, res)

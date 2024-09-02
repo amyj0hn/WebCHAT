@@ -2,6 +2,9 @@
 import cors from  'cors';
 import { userRouter, express } from "./controller/userController.js"
 import { postRouter } from "./controller/postsController.js"
+import { msgRouter } from "./controller/messagesController.js"
+import { notificationRouter } from "./controller/notificationsController.js"
+import { collabRouter } from './controller/collabController.js';
 import { errorHandling } from './middleware/ErrorHandling.js';
 import path from "path";
 
@@ -32,6 +35,11 @@ app.use(
 // Routes
 app.use('/Users', userRouter)
 app.use('/Posts', postRouter)
+app.use('/Messages', msgRouter)
+app.use('/Notifications', notificationRouter)
+app.use('/Collaborations',  collabRouter)
+
+
 
 // Endpoint
 app.get("^/$|/WebCHAT", (req, res)=>{

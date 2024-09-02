@@ -2,7 +2,7 @@
 import { createPool } from "mysql2"
 import "dotenv/config"
 
-let pool = createPool({
+let connection = createPool({
     host:process.env.host,
     database:process.env.database,
     user:process.env.user,
@@ -11,10 +11,10 @@ let pool = createPool({
     connectionLimit: 30
 })
 
-pool.on('pool', (pool)=>{
+connection.on('connection', (pool)=>{
     if(!pool) throw new Error('Unable to connect')
 })
 
 export{
-    pool
+    connection
 }

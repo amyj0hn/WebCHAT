@@ -1,4 +1,4 @@
-import { pool as db } from "../config/index.js";
+import { connection as db } from "../config/index.js";
 import { hash } from "bcrypt";
 
 

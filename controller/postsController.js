@@ -34,7 +34,7 @@ postRouter.patch('/:id', (req,res)=>{
 
 // Delete post
 postRouter.delete('/:id',(req,res)=>{
-    posts.deleteAPostt(req,res)
+    posts.deleteAPost(req,res)
 })
 
 export{

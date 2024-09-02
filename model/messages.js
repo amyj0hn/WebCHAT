@@ -1,4 +1,4 @@
-import { pool as db } from "../config/index.js";
+import { connection as db } from "../config/index.js";
 import { hash } from "bcrypt";
 
 
@@ -28,32 +28,31 @@ class Messages{
         }
       };
 
-      fetchRecentMessages(req, res){
-        try {
-          const strQry = `
-            SELECT 
-            messageID,
-            senderID,
-            recipientID,
-            content
-            FROM Messages
-              ORDER BY messageID DESC
-              LIMIT 5;
-              `
-          db.query(strQry, (err, results) => {
-            if(err) throw new Error(err);
-            res.json({
-              status: res.statusCode,
-              results,
-            });
-          });
-        } catch (e) {
-          res.json({
-            status: 404,
-            msg: e.message,
-          });
-        }
-      }
+//       fetchRecentMessages(req, res){
+//         try {
+//           const strQry = `
+//             SELECT 
+//             messageID,
+//             senderID,
+//             recipientID,
+//             content
+//             FROM Messages
+//             ORDER BY messageID DESC
+//             LIMIT 5;`
+//           db.query(strQry, (err, results) => {
+//             if(err) throw new Error(err);
+//             res.json({
+//               status: res.statusCode,
+//               results,
+//             });
+//           });
+//         } catch (e) {
+//           res.json({
+//             status: 404,
+//             msg: e.message,
+//           });
+//         }
+// }
   
       fetchMessage(req,res){
           try {
@@ -66,8 +65,8 @@ class Messages{
           FROM Messages
           WHERE messageID = ${req.params.id};
           `
-              db.query(strQry, (err, result) => {
-                if(err) throw new Error('Issue occurred while retrieving the desired post')
+              db.query(strQry,[data], (err, result) => {
+                if(err) throw new Error(err)
                 res.json({
                   status: res.statusCode,
                   result: result[0],
@@ -106,10 +105,10 @@ class Messages{
       deleteMessage(req,res){
           try {
               const strQry = `
-                  DELETE FROM Message WHERE messageID = '${req.params.id}';`;
+                  DELETE FROM Messages WHERE messageID = '${req.params.id}';`;
           
               db.query(strQry, (err) => {
-                if(err) throw new Error("To delete a message, please review your delete query");
+                if(err) throw new Error(err);
                 res.json({
                   status: res.statusCode,
                   msg: "The message has been deleted😁",
