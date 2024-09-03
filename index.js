@@ -48,7 +48,7 @@ app.get("^/$|/WebCHAT", (req, res)=>{
 
 // Check the MySQL Database
 app.post('/', (req, res) => {
-    const { email, password } = req.body
+    const { email, userPassword } = req.body
     // Query the MySQL database to check if the user exists
     db.query('SELECT * FROM Users WHERE email = ?', [email], (err, results) => {
       if (err) {
@@ -58,7 +58,7 @@ app.post('/', (req, res) => {
       } else {
         const user = results[0]
         // Check if the password is correct
-        if (password === user.userPassword) {
+        if (userPassword === user.userPassword) {
           res.send({ message: 'Login successful', user })
         } else {
           res.status(401).send({ message: 'Invalid credentials' })
