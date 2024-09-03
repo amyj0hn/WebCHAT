@@ -18,7 +18,6 @@ class Users{
             userAge
             FROM Users;`
 
-
             db.query(sqlQry, (err, results) =>{
                 if (err) throw new Error(err)
                 

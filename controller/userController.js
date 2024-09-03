@@ -31,7 +31,7 @@ userRouter.delete('/:id', (req,res)=>{
 })
 
 // User Login
-userRouter.post('/login', (req,res)=>{
+userRouter.post('/', (req,res)=>{
     users.Login(req,res)
 })
 
