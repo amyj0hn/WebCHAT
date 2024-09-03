@@ -177,7 +177,7 @@ class Users{
                   res.json({
                     status: res.statusCode,
                     token,
-                    result: results[0],
+                    result: result[0],
                   });
                 } else {
                   res.json({
