@@ -2,16 +2,16 @@ import { connection as db } from "../config/index.js";
 import { hash } from "bcrypt";
 
 
-class Posts{
-    fetchPosts(req, res){
+class Comments{
+    fetchComments(req, res){
         try {
           const strQry = `
           SELECT
-          postID,
+          commentID,
           userID,
-          content,
-          image_url
-          FROM Posts;
+          postID,
+          commentText
+          FROM Comments;
               `
           db.query(strQry, (err, results) => {
             if(err) throw new Error(err);
@@ -27,43 +27,19 @@ class Posts{
           });
         }
       };
-
-      fetchRecentPosts(req, res){
-        try {
-          const strQry = `
-              SELECT *
-              FROM Posts 
-              ORDER BY postID DESC
-              LIMIT 5;
-              `
-          db.query(strQry, (err, results) => {
-            if(err) throw new Error(err);
-            res.json({
-              status: res.statusCode,
-              results,
-            });
-          });
-        } catch (e) {
-          res.json({
-            status: 404,
-            msg: e.message,
-          });
-        }
-      }
   
-      fetchAPost(req,res){
+      fetchComment(req,res){
           try {
               const strQry = `
           SELECT
           postID,
           userID,
-          content,
-          image_url
-          FROM Posts
+          commentText
+          FROM Comments
           WHERE postID = ${req.params.id};
           `
               db.query(strQry, (err, result) => {
-                if(err) throw new Error('Issue occurred while retrieving the desired post')
+                if(err) throw new Error(err)
                 res.json({
                   status: res.statusCode,
                   result: result[0],
@@ -77,18 +53,18 @@ class Posts{
             }
   }
   
-      addAPost(req, res){
+      addComment(req, res){
         try{
           let data = req.body
           const strQry = `
-          INSERT INTO Posts
+          INSERT INTO Comments
           SET ?;`
   
           db.query(strQry, [data], (err)=>{
-            if(err) throw new Error('Unable to add post😔')
+            if(err) throw new Error('Unable to add comment😔')
              res.json({
             status:res.statusCode,
-            msg: 'Your post has been added😉'
+            msg: 'Your comment has been added😉'
           }) 
           })
         } catch (e) {
@@ -99,17 +75,17 @@ class Posts{
         }
       }
   
-       updateAPost(req,res){
+       updateComment(req,res){
           try {
               let data = req.body;
               const strQry = `
-                  UPDATE Posts SET ? WHERE postID = '${req.params.id}';
+                  UPDATE Comments ? WHERE postID = '${req.params.id}';
                   `;
               db.query(strQry, [data], (err) => {
-                if(err) throw new Error("Unable to update post😢");
+                if(err) throw new Error("Unable to update comment😢");
                 res.json({
                   status: res.statusCode,
-                  msg: "The post was updated😁",
+                  msg: "The comment was updated😁",
                 });
               });
             } catch (e) {
@@ -120,16 +96,16 @@ class Posts{
             }
       }
   
-      deleteAPost(req,res){
+      deleteComment(req,res){
           try {
               const strQry = `
-                  DELETE FROM Posts WHERE postID = '${req.params.id}';`;
+                  DELETE FROM Comments WHERE commentID = '${req.params.id}';`;
           
               db.query(strQry, (err) => {
                 if(err) throw new Error("To delete a post, please review your delete query");
                 res.json({
                   status: res.statusCode,
-                  msg: "The post has been removed😁",
+                  msg: "The comment has been removed😁",
                 });
               });
             } catch (e) {
@@ -142,5 +118,5 @@ class Posts{
 }
 
 export {
-    Posts
+    Comments
 }

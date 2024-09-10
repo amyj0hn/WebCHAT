@@ -5,6 +5,7 @@ import { postRouter } from "./controller/postsController.js"
 import { msgRouter } from "./controller/messagesController.js"
 import { notificationRouter } from "./controller/notificationsController.js"
 import { collabRouter } from './controller/collabController.js';
+import { commentsRouter } from './controller/commentsController.js';
 import { errorHandling } from './middleware/ErrorHandling.js';
 import path from "path";
 
@@ -34,10 +35,13 @@ app.use(
 
 // Routes
 app.use('/Users', userRouter)
+app.use('/User', userRouter)
 app.use('/Posts', postRouter)
 app.use('/Messages', msgRouter)
 app.use('/Notifications', notificationRouter)
 app.use('/Collaborations',  collabRouter)
+app.use('/Comments',  commentsRouter)
+
 
 
 
@@ -47,25 +51,25 @@ app.get("^/$|/WebCHAT", (req, res)=>{
 })
 
 // Check the MySQL Database
-app.post('/', (req, res) => {
-    const { email, userPassword } = req.body
-    // Query the MySQL database to check if the user exists
-    db.query('SELECT * FROM Users WHERE email = ?', [email], (err, results) => {
-      if (err) {
-        res.status(500).send({ message: 'Error logging in' })
-      } else if (results.length === 0) {
-        res.status(401).send({ message: 'Invalid credentials' })
-      } else {
-        const user = results[0]
-        // Check if the password is correct
-        if (userPassword === user.userPassword) {
-          res.send({ message: 'Login successful', user })
-        } else {
-          res.status(401).send({ message: 'Invalid credentials' })
-        }
-      }
-    })
-  })
+// app.post('/', (req, res) => {
+//     const { email, userPassword } = req.body
+//     // Query the MySQL database to check if the user exists
+//     db.query('SELECT * FROM Users WHERE email = ?', [email], (err, results) => {
+//       if (err) {
+//         res.status(500).send({ message: 'Error logging in' })
+//       } else if (results.length === 0) {
+//         res.status(401).send({ message: 'Invalid credentials' })
+//       } else {
+//         const user = results[0]
+//         // Check if the password is correct
+//         if (userPassword === user.userPassword) {
+//           res.send({ message: 'Login successful', user })
+//         } else {
+//           res.status(401).send({ message: 'Invalid credentials' })
+//         }
+//       }
+//     })
+//   })
 
 // any endpoint that we did not create will return this.
 app.get('*', (req, res) => {        

@@ -22,7 +22,7 @@ userRouter.post('/register', (req,res)=>{
 
 // Update a User
 userRouter.patch('/:id', (req,res)=>{
-    users.UpdateUser(req,res)
+    users.updateUser(req,res)
 })
 
 // Delete a User

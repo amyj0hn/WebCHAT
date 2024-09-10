@@ -97,25 +97,26 @@ class Users{
           } catch (e) {}
     }
 
-    async UpdateUser(req, res){
+    async updateUser(req, res){
         try {
             let data = req.body;
             if (data.userPassword) {
               data.userPassword = await hash(data.userPassword, 12);
             }
             const sqlQry = `
-                UPDATE Users SET ? WHERE userID = '${req.params.id}';
+                UPDATE Users SET ? WHERE userID = ?
                 `;
-            db.query(sqlQry, [data], (err) => {
-              if (err) throw new Error("Unable to update user");
+            db.query(sqlQry, [data, req.params.id], (err) => {
+              // "Unable to update user"
+              if (err) throw new Error(err.message);
               res.json({
                 status: res.statusCode,
                 msg: "The user record was updated😉",
               });
             });
-          } catch (e) {
-            res.json({
-              status: 404,
+          }  catch (e) {
+            res.status(500).json({
+              status: 500,
               err: e.message,
             });
           }
@@ -165,7 +166,7 @@ class Users{
               if (!results?.length) {
                 res.json({
                   status: 401,
-                  msg: "You provided the wrong email🤨",
+                  err: "You provided the wrong email🤨",
                 });
               } else {
                 const isValidPass = await compare(userPassword, results[0].userPassword);
@@ -177,12 +178,13 @@ class Users{
                   res.json({
                     status: res.statusCode,
                     token,
-                    result: result[0],
+                    result: results[0],
+                    msg: 'You are logged in'
                   });
                 } else {
                   res.json({
                     status: 401,
-                    msg: "Invalid password or you are not registered",
+                    err: "Invalid password or you are not registered",
                   });
                 }
               }

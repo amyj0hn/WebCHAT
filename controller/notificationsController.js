@@ -8,7 +8,7 @@ notificationRouter.use(bodyParser.json())
 
 // All Notifications
 notificationRouter.get('/', (req, res)=> {
-    notifications.fetchNofications(req, res)
+    notifications.fetchNotifications(req, res)
 })
 // Single Notification
 notificationRouter.get('/:id', (req,res)=>{ 
