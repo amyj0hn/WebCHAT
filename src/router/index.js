@@ -1,20 +1,75 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-
+import { useCookies } from 'vue3-cookies';
+const {cookies} = useCookies()
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: 'HomeView',
+    component: () => import('@/views/HomeView.vue')
+    
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/login',
+    name: 'login',
+    component: () => import('@/components/Login.vue')
+  },
+  {
+    path: '/logout',
+    name: 'logout',
+    beforeEnter()  {
+    cookies.remove('LegitUser')
+    router.push({name: 'login'})
   }
+},
+
+  {
+    path: '/register',
+    name: 'SignUp',
+    component: () => import('@/components/Register.vue')
+  },
+  {
+    path: '/profile',
+    name: 'userProfile',
+    component: ()  => import('@/views/userProfile.vue'),
+    beforeEnter() {
+      if(!cookies.get('LegitUser')){
+        router.push({name: 'login'})
+      }
+    }
+    },
+    {
+      path: '/messages',
+      name: 'MessagesView',
+      component: () => import('@/views/MessagesView.vue')
+      
+    },
+    {
+      path: '/connect',
+      name: 'SuggestedUsers',
+      component:  () => import('@/views/SuggestedUsers.vue')
+    },
+    {
+      path: '/feedback',
+      name: 'FeedBack',
+      component: () => import('@/views/FeedBack.vue')
+      
+    },
+    {
+      path: '/collaborate',
+      name: 'CollaborationView',
+      component: () => import('@/views/CollaborationView.vue')
+    },
+    {
+      path: '/singleuser/:id',
+      name: 'SingleUser',
+      component: () => import('@/views/SingleUserView.vue')
+    },
+    {
+      path: '/singlepost/:id',
+      name: 'SinglePost',
+      component: () => import('@/views/SinglePost.vue')
+    }
+
 ]
 
 const router = createRouter({
