@@ -3,7 +3,6 @@ import cors from  'cors';
 import { userRouter, express } from "./controller/userController.js"
 import { postRouter } from "./controller/postsController.js"
 import { msgRouter } from "./controller/messagesController.js"
-import { notificationRouter } from "./controller/notificationsController.js"
 import { collabRouter } from './controller/collabController.js';
 import { commentsRouter } from './controller/commentsController.js';
 import { errorHandling } from './middleware/ErrorHandling.js';
@@ -37,8 +36,7 @@ app.use(
 app.use('/Users', userRouter)
 app.use('/User', userRouter)
 app.use('/Posts', postRouter)
-app.use('/Messages', msgRouter)
-app.use('/Notifications', notificationRouter)
+app.use('/Message', msgRouter)
 app.use('/Collaborations',  collabRouter)
 app.use('/Comments',  commentsRouter)
 

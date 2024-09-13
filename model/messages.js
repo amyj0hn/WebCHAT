@@ -98,6 +98,27 @@ JOIN Users ON recipientID = userID;
     }
   }
 
+  updateMessage(req,res){
+    try {
+        let data = req.body;
+        const strQry = `
+            UPDATE Messages SET ? WHERE messageID = '${req.params.id}';
+            `;
+        db.query(strQry, [data], (err) => {
+          if(err) throw new Error("Unable to update message😢");
+          res.json({
+            status: res.statusCode,
+            msg: "The message was updated😁",
+          });
+        });
+      } catch (e) {
+        res.json({
+          status: 404,
+          err: e.message
+        });
+      }
+}
+
   deleteMessage(req, res) {
     try {
       const strQry = `

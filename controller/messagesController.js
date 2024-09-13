@@ -20,6 +20,11 @@ msgRouter.get('/:id', (req,res)=>{
 //     messages.fetchRecentMessages(req, res)
 // })
 
+// Edit/ Update message
+msgRouter.patch('/:id', (req,res)=>{
+    messages.updateMessage(req,res)
+})
+
 // Add message
 msgRouter.post('/add', (req, res) => {
     messages.addMessage(req, res)

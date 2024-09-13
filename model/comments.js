@@ -102,7 +102,7 @@ class Comments{
                   DELETE FROM Comments WHERE commentID = '${req.params.id}';`;
           
               db.query(strQry, (err) => {
-                if(err) throw new Error("To delete a post, please review your delete query");
+                if(err) throw new Error("To delete a comment, please review your delete query");
                 res.json({
                   status: res.statusCode,
                   msg: "The comment has been removed😁",
